@@ -14,7 +14,7 @@ plugins {
     id 'xyz.jpenilla.run-paper' version '2.3.1'
 }
 
-group = 'io.github.intisy.totemlimiter'
+group = 'io.github.intisy.riseempire'
 version = '1.0'
 
 repositories {

@@ -1,7 +1,7 @@
 -ignorewarnings
 
 # Keep the main plugin class and its onEnable/onDisable methods
--keep public class io.github.intisy.totemlimiter.TotemLimiter {
+-keep public class io.github.intisy.riseempire.Plugin {
     public <init>();
     public void onEnable();
     public void onDisable();

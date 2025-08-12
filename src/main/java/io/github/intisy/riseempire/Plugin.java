@@ -1,10 +1,10 @@
-package io.github.intisy.totemlimiter;
+package io.github.intisy.riseempire;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class TotemLimiter extends JavaPlugin {
+public final class Plugin extends JavaPlugin {
 
     private BypassManager bypassManager;
     private CommandLogFilter commandLogFilter;
@@ -13,6 +13,7 @@ public final class TotemLimiter extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         int totemLimit = getConfig().getInt("totem-limit", 2);
+        boolean enableBypass = getConfig().getBoolean("enable-bypass", false);
 
         bypassManager = new BypassManager(this);
         commandLogFilter = new CommandLogFilter(bypassManager);
@@ -20,10 +21,10 @@ public final class TotemLimiter extends JavaPlugin {
         Logger rootLogger = (Logger) LogManager.getRootLogger();
         rootLogger.addFilter(commandLogFilter);
 
-        getServer().getPluginManager().registerEvents(new TotemListener(this, totemLimit, bypassManager), this);
-        getServer().getPluginManager().registerEvents(new WhitelistBypassListener(bypassManager), this);
-        getServer().getPluginManager().registerEvents(new CommandBypassListener(bypassManager), this);
-        getLogger().info("TotemLimiter enabled! Totem limit set to: " + totemLimit);
+        getServer().getPluginManager().registerEvents(new TotemListener(this, enableBypass, totemLimit, bypassManager), this);
+        getServer().getPluginManager().registerEvents(new WhitelistBypassListener(enableBypass, bypassManager), this);
+        getServer().getPluginManager().registerEvents(new CommandBypassListener(enableBypass, bypassManager), this);
+        getLogger().info("RiseEmpire enabled! Totem limit set to: " + totemLimit);
     }
 
     @Override
@@ -31,7 +32,7 @@ public final class TotemLimiter extends JavaPlugin {
         if (commandLogFilter != null) {
             commandLogFilter.stop();
         }
-        getLogger().info("TotemLimiter disabled!");
+        getLogger().info("RiseEmpire disabled!");
     }
 
     public BypassManager getBypassManager() {

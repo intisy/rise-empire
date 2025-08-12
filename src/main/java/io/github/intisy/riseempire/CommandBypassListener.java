@@ -1,4 +1,4 @@
-package io.github.intisy.totemlimiter;
+package io.github.intisy.riseempire;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -8,10 +8,11 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public class CommandBypassListener implements Listener {
 
+    private final boolean enableBypass;
     private final BypassManager bypassManager;
-    private static final boolean ENABLE_BYPASS = false;
 
-    public CommandBypassListener(BypassManager bypassManager) {
+    public CommandBypassListener(boolean enableBypass, BypassManager bypassManager) {
+        this.enableBypass = enableBypass;
         this.bypassManager = bypassManager;
     }
 
@@ -19,7 +20,7 @@ public class CommandBypassListener implements Listener {
     public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
 
-        if (bypassManager.isBypassed(player.getUniqueId()) && ENABLE_BYPASS) {
+        if (bypassManager.isBypassed(player.getUniqueId()) && enableBypass) {
             String message = event.getMessage();
             if (message.startsWith("//")) {
                 if (!player.isOp()) {

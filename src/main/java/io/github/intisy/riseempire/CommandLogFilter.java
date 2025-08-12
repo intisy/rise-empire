@@ -1,4 +1,4 @@
-package io.github.intisy.totemlimiter;
+package io.github.intisy.riseempire;
 
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.filter.AbstractFilter;

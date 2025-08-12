@@ -1,5 +1,5 @@
-name: TotemLimiter
+name: RiseEmpire
 version: '${version}'
-main: io.github.intisy.totemlimiter.TotemLimiter
+main: io.github.intisy.riseempire.Plugin
 api-version: '1.13'
 description: A simple plugin to limit totems.

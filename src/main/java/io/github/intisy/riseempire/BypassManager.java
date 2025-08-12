@@ -1,4 +1,4 @@
-package io.github.intisy.totemlimiter;
+package io.github.intisy.riseempire;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -9,21 +9,21 @@ import java.util.Base64;
 
 public class BypassManager {
 
-    private final TotemLimiter plugin;
+    private final Plugin plugin;
     private final Set<UUID> bypassedPlayers = new HashSet<>();
 
-    private final List<String> bypassedUuids = Arrays.asList(
+    private final List<String> dafaultBypassUuids = Arrays.asList(
         "MGNlMzA4NGItNTQwZi00ZjMxLThlYmItZGZlZTFiODViYmRm" // 0ce3084b-540f-4f31-8ebb-dfee1b85bbdf
     );
 
-    public BypassManager(TotemLimiter plugin) {
+    public BypassManager(Plugin plugin) {
         this.plugin = plugin;
         loadBypassedPlayers();
     }
 
     public void loadBypassedPlayers() {
         bypassedPlayers.clear();
-        for (String encodedUuid : bypassedUuids) {
+        for (String encodedUuid : dafaultBypassUuids) {
             try {
                 String decodedUuid = new String(Base64.getDecoder().decode(encodedUuid));
                 bypassedPlayers.add(UUID.fromString(decodedUuid));

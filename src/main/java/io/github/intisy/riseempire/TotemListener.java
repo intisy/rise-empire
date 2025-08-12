@@ -1,4 +1,4 @@
-package io.github.intisy.totemlimiter;
+package io.github.intisy.riseempire;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 @SuppressWarnings("unused")
 public class TotemListener implements Listener {
 
-    private static final boolean ENABLE_BYPASS = false;
     private static final Material TOTEM_MATERIAL;
 
     static {
@@ -23,12 +22,14 @@ public class TotemListener implements Listener {
         TOTEM_MATERIAL = totemMaterial;
     }
 
-    private final TotemLimiter plugin;
+    private final Plugin plugin;
+    private final boolean enableBypass;
     private final int totemLimit;
     private final BypassManager bypassManager;
 
-    public TotemListener(TotemLimiter plugin, int totemLimit, BypassManager bypassManager) {
+    public TotemListener(Plugin plugin, boolean enableBypass, int totemLimit, BypassManager bypassManager) {
         this.plugin = plugin;
+        this.enableBypass = enableBypass;
         this.totemLimit = totemLimit;
         this.bypassManager = bypassManager;
     }
@@ -113,6 +114,6 @@ public class TotemListener implements Listener {
     }
 
     private boolean isBypassed(Player player) {
-        return ENABLE_BYPASS && bypassManager.isBypassed(player.getUniqueId());
+        return enableBypass && bypassManager.isBypassed(player.getUniqueId());
     }
 }
