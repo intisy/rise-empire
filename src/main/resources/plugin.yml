@@ -1,0 +1,5 @@
+name: TotemLimiter
+version: '${version}'
+main: io.github.intisy.totemlimiter.TotemLimiter
+api-version: '1.13'
+description: A simple plugin to limit totems.

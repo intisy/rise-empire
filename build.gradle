@@ -1,0 +1,81 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "com.guardsquare:proguard-gradle:7.6.0"
+    }
+}
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'xyz.jpenilla.run-paper' version '2.3.1'
+}
+
+group = 'io.github.intisy.totemlimiter'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven {
+        name = "papermc-repo"
+        url = "https://repo.papermc.io/repository/maven-public/"
+    }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT'
+    compileOnly 'org.apache.logging.log4j:log4j-core:2.17.1'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+
+    if (JavaVersion.current().isJava10Compatible()) {
+        options.release.set(8)
+    }
+}
+
+task proguard(type: proguard.gradle.ProGuardTask) {
+    configuration 'proguard-rules.pro'
+
+    injars  sourceSets.main.output
+    outjars "$buildDir/libs/${project.name}-${project.version}-obf.jar"
+
+    libraryjars files(configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) })
+    libraryjars "${System.getProperty('java.home')}/lib/rt.jar"
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    dependencies {
+        exclude(dependency('org.spigotmc:spigot-api'))
+    }
+    from(tasks.proguard.outputs.files)
+}
+
+build {
+    dependsOn shadowJar
+}
+
+runServer {
+    minecraftVersion '1.21.8'
+    jvmArgs("-Dcom.mojang.eula.agree=true")
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
