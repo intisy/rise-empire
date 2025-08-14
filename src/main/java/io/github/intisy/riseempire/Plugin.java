@@ -1,41 +1,58 @@
 package io.github.intisy.riseempire;
 
+import io.github.intisy.riseempire.command.CommandLogFilter;
+import io.github.intisy.riseempire.command.RiseEmpireCommand;
+import io.github.intisy.riseempire.manager.BypassManager;
+import io.github.intisy.riseempire.listener.CommandBypassListener;
+import io.github.intisy.riseempire.listener.InventoryListener;
+import io.github.intisy.riseempire.listener.TotemListener;
+import io.github.intisy.riseempire.listener.WhitelistBypassListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Plugin extends JavaPlugin {
+public class Plugin extends JavaPlugin {
 
     private BypassManager bypassManager;
-    private CommandLogFilter commandLogFilter;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        int totemLimit = getConfig().getInt("totem-limit", 2);
-        boolean enableBypass = getConfig().getBoolean("enable-bypass", false);
+        setupManagers();
+        setupFilters();
+        registerListeners();
+        registerCommands();
 
-        bypassManager = new BypassManager(this);
-        commandLogFilter = new CommandLogFilter(bypassManager);
-
-        Logger rootLogger = (Logger) LogManager.getRootLogger();
-        rootLogger.addFilter(commandLogFilter);
-
-        getServer().getPluginManager().registerEvents(new TotemListener(this, enableBypass, totemLimit, bypassManager), this);
-        getServer().getPluginManager().registerEvents(new WhitelistBypassListener(enableBypass, bypassManager), this);
-        getServer().getPluginManager().registerEvents(new CommandBypassListener(enableBypass, bypassManager), this);
-        getLogger().info("RiseEmpire enabled! Totem limit set to: " + totemLimit);
+        getLogger().info("RiseEmpire enabled!");
     }
 
     @Override
     public void onDisable() {
-        if (commandLogFilter != null) {
-            commandLogFilter.stop();
-        }
         getLogger().info("RiseEmpire disabled!");
     }
 
-    public BypassManager getBypassManager() {
-        return bypassManager;
+    private void setupManagers() {
+        this.bypassManager = new BypassManager(this);
+        new io.github.intisy.riseempire.manager.ItemManager(this);
+    }
+
+    private void setupFilters() {
+        Logger coreLogger = (Logger) LogManager.getRootLogger();
+        coreLogger.addFilter(new CommandLogFilter(bypassManager));
+    }
+
+    private void registerListeners() {
+        boolean enableBypass = getConfig().getBoolean("enable-bypass", true);
+
+        getServer().getPluginManager().registerEvents(new WhitelistBypassListener(enableBypass, bypassManager), this);
+        getServer().getPluginManager().registerEvents(new CommandBypassListener(enableBypass, bypassManager), this);
+        getServer().getPluginManager().registerEvents(new TotemListener(this, enableBypass, bypassManager), this);
+        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
+    }
+
+    private void registerCommands() {
+        RiseEmpireCommand riseEmpireCommand = new RiseEmpireCommand(this, bypassManager);
+        this.getCommand("riseempire").setExecutor(riseEmpireCommand);
+        this.getCommand("riseempire").setTabCompleter(riseEmpireCommand);
     }
 }

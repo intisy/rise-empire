@@ -1,5 +1,7 @@
-package io.github.intisy.riseempire;
+package io.github.intisy.riseempire.listener;
 
+import io.github.intisy.riseempire.manager.BypassManager;
+import io.github.intisy.riseempire.Plugin;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,13 +26,11 @@ public class TotemListener implements Listener {
 
     private final Plugin plugin;
     private final boolean enableBypass;
-    private final int totemLimit;
     private final BypassManager bypassManager;
 
-    public TotemListener(Plugin plugin, boolean enableBypass, int totemLimit, BypassManager bypassManager) {
+    public TotemListener(Plugin plugin, boolean enableBypass, BypassManager bypassManager) {
         this.plugin = plugin;
         this.enableBypass = enableBypass;
-        this.totemLimit = totemLimit;
         this.bypassManager = bypassManager;
     }
 
@@ -50,6 +50,7 @@ public class TotemListener implements Listener {
             return;
         }
         if (event.getItem().getItemStack().getType() == TOTEM_MATERIAL) {
+            int totemLimit = plugin.getConfig().getInt("totem-limit", 2);
             int currentTotems = getTotemCount(event.getPlayer());
             if (currentTotems >= totemLimit) {
                 event.setCancelled(true);
@@ -69,6 +70,7 @@ public class TotemListener implements Listener {
             return;
         }
 
+        int totemLimit = plugin.getConfig().getInt("totem-limit", 2);
         ItemStack currentItem = event.getCurrentItem();
 
         if (event.isShiftClick() && currentItem != null && currentItem.getType() == TOTEM_MATERIAL) {
@@ -105,6 +107,7 @@ public class TotemListener implements Listener {
         ItemStack cursorItem = event.getPlayer().getItemOnCursor();
 
         if (cursorItem != null && cursorItem.getType() == TOTEM_MATERIAL) {
+            int totemLimit = plugin.getConfig().getInt("totem-limit", 2);
             if (getTotemCount(player) >= totemLimit) {
                 event.getView().setCursor(null);
                 player.getWorld().dropItemNaturally(player.getLocation(), cursorItem);

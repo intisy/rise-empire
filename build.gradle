@@ -34,6 +34,10 @@ repositories {
     }
 }
 
+configurations {
+    compileOnly.setCanBeResolved(true)
+}
+
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT'
     compileOnly 'org.apache.logging.log4j:log4j-core:2.17.1'
@@ -53,13 +57,13 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 task proguard(type: proguard.gradle.ProGuardTask) {
+    enabled = false
     configuration 'proguard-rules.pro'
 
     injars  sourceSets.main.output
     outjars "$buildDir/libs/${project.name}-${project.version}-obf.jar"
 
-    libraryjars files(configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) })
-    libraryjars "${System.getProperty('java.home')}/lib/rt.jar"
+    libraryjars(sourceSets.main.compileClasspath)
 }
 
 shadowJar {
@@ -67,7 +71,6 @@ shadowJar {
     dependencies {
         exclude(dependency('org.spigotmc:spigot-api'))
     }
-    from(tasks.proguard.outputs.files)
 }
 
 build {
@@ -75,7 +78,7 @@ build {
 }
 
 runServer {
-    minecraftVersion '1.21.8'
+    minecraftVersion '1.21.1'
     jvmArgs("-Dcom.mojang.eula.agree=true")
 }
 

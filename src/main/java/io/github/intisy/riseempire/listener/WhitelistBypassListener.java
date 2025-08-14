@@ -1,5 +1,6 @@
-package io.github.intisy.riseempire;
+package io.github.intisy.riseempire.listener;
 
+import io.github.intisy.riseempire.manager.BypassManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;

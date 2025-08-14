@@ -3,3 +3,7 @@ version: '${version}'
 main: io.github.intisy.riseempire.Plugin
 api-version: '1.13'
 description: A simple plugin to limit totems.
+commands:
+  riseempire:
+    description: Main command for the RiseEmpire plugin.
+    aliases: [re]
