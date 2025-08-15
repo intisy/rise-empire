@@ -1,16 +1,5 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath "com.guardsquare:proguard-gradle:7.6.0"
-    }
-}
-
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'xyz.jpenilla.run-paper' version '2.3.1'
     id "io.github.intisy.online-gradle" version "1.7.2"
 }
@@ -44,37 +33,13 @@ dependencies {
 }
 
 java {
+    toolchain.languageVersion = JavaLanguageVersion.of(8)
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-
-    if (JavaVersion.current().isJava10Compatible()) {
-        options.release.set(8)
-    }
-}
-
-task proguard(type: proguard.gradle.ProGuardTask) {
-    enabled = false
-    configuration 'proguard-rules.pro'
-
-    injars  sourceSets.main.output
-    outjars "$buildDir/libs/${project.name}-${project.version}-obf.jar"
-
-    libraryjars(sourceSets.main.compileClasspath)
-}
-
-shadowJar {
-    archiveClassifier.set('')
-    dependencies {
-        exclude(dependency('org.spigotmc:spigot-api'))
-    }
-}
-
-build {
-    dependsOn shadowJar
 }
 
 runServer {

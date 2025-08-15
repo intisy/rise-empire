@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/totem-limiter.main.iml" filepath="$PROJECT_DIR$/.idea/modules/totem-limiter.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rise-empire.main.iml" filepath="$PROJECT_DIR$/.idea/modules/rise-empire.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/totem-limiter.iml" filepath="$PROJECT_DIR$/.idea/modules/totem-limiter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/totem-limiter.test.iml" filepath="$PROJECT_DIR$/.idea/modules/totem-limiter.test.iml" />
     </modules>
   </component>
 </project>
