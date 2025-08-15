@@ -9,7 +9,7 @@ online {
     autoUpdate = true
     updateDelay = 3600
     presets = [
-            "https://raw.githubusercontent.com/intisy/gradle-snippets/presets/default.preset:1.8"
+            "https://raw.githubusercontent.com/intisy/gradle-snippets/presets/default.preset:17"
     ]
 }
 
@@ -32,9 +32,9 @@ dependencies {
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(8)
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 tasks.withType(JavaCompile).configureEach {
